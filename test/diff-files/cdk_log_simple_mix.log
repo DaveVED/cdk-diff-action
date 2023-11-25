@@ -1,0 +1,140 @@
+
+> dennis-ventures-cdk@0.1.0 cdk
+> cdk diff --progress=events
+
+Stack DennisVenturesCdkStack
+Resources
+[~] AWS::EC2::VPC DennisVenturesCdkStack/Vpc DennisVenturesCdkStackVpc22D0C361 replace
+ ├─ [~] CidrBlock (requires replacement)
+ │   ├─ [-] 10.0.0.0/16
+ │   └─ [+] 10.1.0.0/16
+ └─ [~] Tags
+     └─ @@ -1,6 +1,6 @@
+        [ ] [
+        [ ]   {
+        [ ]     "Key": "Name",
+        [-]     "Value": "dennis-ventures"
+        [+]     "Value": "dennis-venturesss"
+        [ ]   }
+        [ ] ]
+[~] AWS::EC2::Subnet DennisVenturesCdkStack/Vpc/PublicSubnet1/Subnet DennisVenturesCdkStackVpcPublicSubnet1Subnet6B0125E3 replace
+ └─ [~] CidrBlock (requires replacement)
+     ├─ [-] 10.0.0.0/18
+     └─ [+] 10.1.0.0/18
+[~] AWS::EC2::RouteTable DennisVenturesCdkStack/Vpc/PublicSubnet1/RouteTable DennisVenturesCdkStackVpcPublicSubnet1RouteTable7C325285 replace
+ └─ [~] VpcId (requires replacement)
+     └─ [~] .Ref:
+         ├─ [-] DennisVenturesCdkStackVpc22D0C361
+         └─ [+] DennisVenturesCdkStackVpc22D0C361 (replaced)
+[~] AWS::EC2::SubnetRouteTableAssociation DennisVenturesCdkStack/Vpc/PublicSubnet1/RouteTableAssociation DennisVenturesCdkStackVpcPublicSubnet1RouteTableAssociation7D6D4DB0 replace
+ ├─ [~] RouteTableId (requires replacement)
+ │   └─ [~] .Ref:
+ │       ├─ [-] DennisVenturesCdkStackVpcPublicSubnet1RouteTable7C325285
+ │       └─ [+] DennisVenturesCdkStackVpcPublicSubnet1RouteTable7C325285 (replaced)
+ └─ [~] SubnetId (requires replacement)
+     └─ [~] .Ref:
+         ├─ [-] DennisVenturesCdkStackVpcPublicSubnet1Subnet6B0125E3
+         └─ [+] DennisVenturesCdkStackVpcPublicSubnet1Subnet6B0125E3 (replaced)
+[~] AWS::EC2::Route DennisVenturesCdkStack/Vpc/PublicSubnet1/DefaultRoute DennisVenturesCdkStackVpcPublicSubnet1DefaultRouteD8A62D49 replace
+ └─ [~] RouteTableId (requires replacement)
+     └─ [~] .Ref:
+         ├─ [-] DennisVenturesCdkStackVpcPublicSubnet1RouteTable7C325285
+         └─ [+] DennisVenturesCdkStackVpcPublicSubnet1RouteTable7C325285 (replaced)
+[~] AWS::EC2::NatGateway DennisVenturesCdkStack/Vpc/PublicSubnet1/NATGateway DennisVenturesCdkStackVpcPublicSubnet1NATGateway5A0F7DED replace
+ └─ [~] SubnetId (requires replacement)
+     └─ [~] .Ref:
+         ├─ [-] DennisVenturesCdkStackVpcPublicSubnet1Subnet6B0125E3
+         └─ [+] DennisVenturesCdkStackVpcPublicSubnet1Subnet6B0125E3 (replaced)
+[~] AWS::EC2::Subnet DennisVenturesCdkStack/Vpc/PublicSubnet2/Subnet DennisVenturesCdkStackVpcPublicSubnet2SubnetCE003636 replace
+ └─ [~] CidrBlock (requires replacement)
+     ├─ [-] 10.0.64.0/18
+     └─ [+] 10.1.64.0/18
+[~] AWS::EC2::RouteTable DennisVenturesCdkStack/Vpc/PublicSubnet2/RouteTable DennisVenturesCdkStackVpcPublicSubnet2RouteTable634DC59C replace
+ └─ [~] VpcId (requires replacement)
+     └─ [~] .Ref:
+         ├─ [-] DennisVenturesCdkStackVpc22D0C361
+         └─ [+] DennisVenturesCdkStackVpc22D0C361 (replaced)
+[~] AWS::EC2::SubnetRouteTableAssociation DennisVenturesCdkStack/Vpc/PublicSubnet2/RouteTableAssociation DennisVenturesCdkStackVpcPublicSubnet2RouteTableAssociation6FC3BD0C replace
+ ├─ [~] RouteTableId (requires replacement)
+ │   └─ [~] .Ref:
+ │       ├─ [-] DennisVenturesCdkStackVpcPublicSubnet2RouteTable634DC59C
+ │       └─ [+] DennisVenturesCdkStackVpcPublicSubnet2RouteTable634DC59C (replaced)
+ └─ [~] SubnetId (requires replacement)
+     └─ [~] .Ref:
+         ├─ [-] DennisVenturesCdkStackVpcPublicSubnet2SubnetCE003636
+         └─ [+] DennisVenturesCdkStackVpcPublicSubnet2SubnetCE003636 (replaced)
+[~] AWS::EC2::Route DennisVenturesCdkStack/Vpc/PublicSubnet2/DefaultRoute DennisVenturesCdkStackVpcPublicSubnet2DefaultRoute92F6349D replace
+ └─ [~] RouteTableId (requires replacement)
+     └─ [~] .Ref:
+         ├─ [-] DennisVenturesCdkStackVpcPublicSubnet2RouteTable634DC59C
+         └─ [+] DennisVenturesCdkStackVpcPublicSubnet2RouteTable634DC59C (replaced)
+[~] AWS::EC2::NatGateway DennisVenturesCdkStack/Vpc/PublicSubnet2/NATGateway DennisVenturesCdkStackVpcPublicSubnet2NATGateway1C6CDC9A replace
+ └─ [~] SubnetId (requires replacement)
+     └─ [~] .Ref:
+         ├─ [-] DennisVenturesCdkStackVpcPublicSubnet2SubnetCE003636
+         └─ [+] DennisVenturesCdkStackVpcPublicSubnet2SubnetCE003636 (replaced)
+[~] AWS::EC2::Subnet DennisVenturesCdkStack/Vpc/PrivateSubnet1/Subnet DennisVenturesCdkStackVpcPrivateSubnet1Subnet532A9C3A replace
+ └─ [~] CidrBlock (requires replacement)
+     ├─ [-] 10.0.128.0/18
+     └─ [+] 10.1.128.0/18
+[~] AWS::EC2::RouteTable DennisVenturesCdkStack/Vpc/PrivateSubnet1/RouteTable DennisVenturesCdkStackVpcPrivateSubnet1RouteTableAD24CC04 replace
+ └─ [~] VpcId (requires replacement)
+     └─ [~] .Ref:
+         ├─ [-] DennisVenturesCdkStackVpc22D0C361
+         └─ [+] DennisVenturesCdkStackVpc22D0C361 (replaced)
+[~] AWS::EC2::SubnetRouteTableAssociation DennisVenturesCdkStack/Vpc/PrivateSubnet1/RouteTableAssociation DennisVenturesCdkStackVpcPrivateSubnet1RouteTableAssociation3181F8C4 replace
+ ├─ [~] RouteTableId (requires replacement)
+ │   └─ [~] .Ref:
+ │       ├─ [-] DennisVenturesCdkStackVpcPrivateSubnet1RouteTableAD24CC04
+ │       └─ [+] DennisVenturesCdkStackVpcPrivateSubnet1RouteTableAD24CC04 (replaced)
+ └─ [~] SubnetId (requires replacement)
+     └─ [~] .Ref:
+         ├─ [-] DennisVenturesCdkStackVpcPrivateSubnet1Subnet532A9C3A
+         └─ [+] DennisVenturesCdkStackVpcPrivateSubnet1Subnet532A9C3A (replaced)
+[~] AWS::EC2::Route DennisVenturesCdkStack/Vpc/PrivateSubnet1/DefaultRoute DennisVenturesCdkStackVpcPrivateSubnet1DefaultRoute2992C7D5 replace
+ └─ [~] RouteTableId (requires replacement)
+     └─ [~] .Ref:
+         ├─ [-] DennisVenturesCdkStackVpcPrivateSubnet1RouteTableAD24CC04
+         └─ [+] DennisVenturesCdkStackVpcPrivateSubnet1RouteTableAD24CC04 (replaced)
+[~] AWS::EC2::Subnet DennisVenturesCdkStack/Vpc/PrivateSubnet2/Subnet DennisVenturesCdkStackVpcPrivateSubnet2Subnet73627312 replace
+ └─ [~] CidrBlock (requires replacement)
+     ├─ [-] 10.0.192.0/18
+     └─ [+] 10.1.192.0/18
+[~] AWS::EC2::RouteTable DennisVenturesCdkStack/Vpc/PrivateSubnet2/RouteTable DennisVenturesCdkStackVpcPrivateSubnet2RouteTable982F9CB4 replace
+ └─ [~] VpcId (requires replacement)
+     └─ [~] .Ref:
+         ├─ [-] DennisVenturesCdkStackVpc22D0C361
+         └─ [+] DennisVenturesCdkStackVpc22D0C361 (replaced)
+[~] AWS::EC2::SubnetRouteTableAssociation DennisVenturesCdkStack/Vpc/PrivateSubnet2/RouteTableAssociation DennisVenturesCdkStackVpcPrivateSubnet2RouteTableAssociation48B90D6E replace
+ ├─ [~] RouteTableId (requires replacement)
+ │   └─ [~] .Ref:
+ │       ├─ [-] DennisVenturesCdkStackVpcPrivateSubnet2RouteTable982F9CB4
+ │       └─ [+] DennisVenturesCdkStackVpcPrivateSubnet2RouteTable982F9CB4 (replaced)
+ └─ [~] SubnetId (requires replacement)
+     └─ [~] .Ref:
+         ├─ [-] DennisVenturesCdkStackVpcPrivateSubnet2Subnet73627312
+         └─ [+] DennisVenturesCdkStackVpcPrivateSubnet2Subnet73627312 (replaced)
+[~] AWS::EC2::Route DennisVenturesCdkStack/Vpc/PrivateSubnet2/DefaultRoute DennisVenturesCdkStackVpcPrivateSubnet2DefaultRoute9D5E2561 replace
+ └─ [~] RouteTableId (requires replacement)
+     └─ [~] .Ref:
+         ├─ [-] DennisVenturesCdkStackVpcPrivateSubnet2RouteTable982F9CB4
+         └─ [+] DennisVenturesCdkStackVpcPrivateSubnet2RouteTable982F9CB4 (replaced)
+[~] AWS::EC2::InternetGateway DennisVenturesCdkStack/Vpc/IGW DennisVenturesCdkStackVpcIGW528D6B18 
+ └─ [~] Tags
+     └─ @@ -1,6 +1,6 @@
+        [ ] [
+        [ ]   {
+        [ ]     "Key": "Name",
+        [-]     "Value": "dennis-ventures"
+        [+]     "Value": "dennis-venturesss"
+        [ ]   }
+        [ ] ]
+[~] AWS::EC2::VPCGatewayAttachment DennisVenturesCdkStack/Vpc/VPCGW DennisVenturesCdkStackVpcVPCGWFBDA077C replace
+ └─ [~] VpcId (requires replacement)
+     └─ [~] .Ref:
+         ├─ [-] DennisVenturesCdkStackVpc22D0C361
+         └─ [+] DennisVenturesCdkStackVpc22D0C361 (replaced)
+
+
+✨  Number of stacks with differences: 1
+
