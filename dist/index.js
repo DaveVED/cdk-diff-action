@@ -29007,7 +29007,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.convertToMarkdown = exports.containsReplacementPhrase = exports.replaceAnsiEscapeCodes = exports.isNumberOfDifferencesString = void 0;
+exports.convertToMarkdown = exports.convertToDiff = exports.containsReplacementPhrase = exports.replaceAnsiEscapeCodes = exports.isNumberOfDifferencesString = void 0;
 const fs = __importStar(__nccwpck_require__(7147));
 const readline = __importStar(__nccwpck_require__(4521));
 const REGEX_NUMBER_OF_DIFFERENCES_STRING = /Number of stacks with differences:.*/;
@@ -29025,6 +29025,30 @@ const containsReplacementPhrase = (input) => {
     return REGEX_REQUIRES_REPLACEMENT.test(input);
 };
 exports.containsReplacementPhrase = containsReplacementPhrase;
+const convertToDiff = (line) => {
+    const regex = /(?:\[(\+|-+)\])|(?:│\s(\+|-)\s│)/;
+    const matches = line.match(regex);
+    let foundSymbol = '';
+    if (matches) {
+        for (let i = 1; i < matches.length; i++) {
+            const match = matches[i];
+            if (match) {
+                foundSymbol = match;
+                // No logging as per your request
+                break; // Break as we found the symbol
+            }
+        }
+    }
+    let modifiedLine = line;
+    if (foundSymbol !== '') {
+        if (!line.startsWith('[')) {
+            modifiedLine = modifiedLine.substring(1); // Trim the first character if it's not '['
+        }
+        modifiedLine = foundSymbol + modifiedLine;
+    }
+    return modifiedLine;
+};
+exports.convertToDiff = convertToDiff;
 const convertToMarkdown = async (filePath) => {
     return new Promise((resolve, reject) => {
         let markdownContent = [];
@@ -29037,6 +29061,9 @@ const convertToMarkdown = async (filePath) => {
         });
         rl.on('line', (line) => {
             const cleanLine = (0, exports.replaceAnsiEscapeCodes)(line);
+            const diffLine = (0, exports.convertToDiff)(cleanLine);
+            // Append processed line to markdown content
+            markdownContent.push(diffLine);
             // Check for number of differences
             if ((0, exports.isNumberOfDifferencesString)(cleanLine)) {
                 numberOfDiffs.push(cleanLine);

@@ -17,6 +17,32 @@ export const containsReplacementPhrase = (input: string): boolean => {
     return REGEX_REQUIRES_REPLACEMENT.test(input);
 }
 
+export const convertToDiff = (line: string): string => {
+    const regex = /(?:\[(\+|-+)\])|(?:│\s(\+|-)\s│)/;
+    const matches = line.match(regex);
+
+    let foundSymbol = '';
+    if (matches) {
+        for (let i = 1; i < matches.length; i++) {
+            const match = matches[i];
+            if (match) {
+                foundSymbol = match;
+                // No logging as per your request
+                break; // Break as we found the symbol
+            }
+        }
+    }
+
+    let modifiedLine = line;
+    if (foundSymbol !== '') {
+        if (!line.startsWith('[')) {
+            modifiedLine = modifiedLine.substring(1); // Trim the first character if it's not '['
+        }
+        modifiedLine = foundSymbol + modifiedLine;
+    }
+
+    return modifiedLine;
+};
 
 export const convertToMarkdown = async (filePath: string): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -32,13 +58,17 @@ export const convertToMarkdown = async (filePath: string): Promise<string> => {
 
         rl.on('line', (line) => {
             const cleanLine = replaceAnsiEscapeCodes(line);
+            const diffLine = convertToDiff(cleanLine);
+
+            // Append processed line to markdown content
+            markdownContent.push(diffLine);
 
             // Check for number of differences
             if (isNumberOfDifferencesString(cleanLine)) {
                 numberOfDiffs.push(cleanLine);
             }
 
-            if(containsReplacementPhrase(cleanLine)) {
+            if (containsReplacementPhrase(cleanLine)) {
                 numberOfReplacements++;
             }
         });
