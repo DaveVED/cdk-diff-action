@@ -28893,7 +28893,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.postCommentOnPullRequest = void 0;
+exports.truncateCommentOnPullRequestContent = exports.postCommentOnPullRequest = void 0;
 const core_1 = __nccwpck_require__(6762);
 const github = __importStar(__nccwpck_require__(5438));
 const postCommentOnPullRequest = async (repoToken, diffOutput) => {
@@ -28905,7 +28905,7 @@ const postCommentOnPullRequest = async (repoToken, diffOutput) => {
   <details>
   <summary>Show Diff</summary>
   
-  \`\`\`
+  \`\`\`diff
   ${diffOutput}
   \`\`\`
   
@@ -28920,6 +28920,14 @@ const postCommentOnPullRequest = async (repoToken, diffOutput) => {
     }
 };
 exports.postCommentOnPullRequest = postCommentOnPullRequest;
+const truncateCommentOnPullRequestContent = (content) => {
+    let truncatedContent = content.join('\n');
+    if (truncatedContent.length > 65000) {
+        truncatedContent = `${truncatedContent.slice(0, 65000)}\n...truncated`;
+    }
+    return truncatedContent;
+};
+exports.truncateCommentOnPullRequestContent = truncateCommentOnPullRequestContent;
 
 
 /***/ }),
@@ -28964,7 +28972,7 @@ const transform_1 = __nccwpck_require__(5200);
 async function run() {
     try {
         const repoToken = core.getInput('repo-token');
-        const markdown = await (0, transform_1.convertToMarkdown)("./test/diff-files/cdk_log_simple_add.log");
+        const markdown = await (0, transform_1.convertCdkDiffToMarkdown)('./test/diff-files/cdk_log_simple_mix.log');
         await (0, github_1.postCommentOnPullRequest)(repoToken, markdown);
     }
     catch (error) {
@@ -29007,37 +29015,66 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.convertToMarkdown = exports.containsReplacementPhrase = exports.replaceAnsiEscapeCodes = exports.isNumberOfDifferencesString = void 0;
+exports.convertCdkDiffToMarkdown = exports.convertToDiff = exports.trimLineIfNeeded = exports.findDiffSymbol = exports.containsReplacementPhrase = exports.replaceAnsiEscapeCodes = exports.isNumberOfDifferencesString = exports.REGEX_MARKDOWN_DIFF_STRING = exports.REGEX_REQUIRES_REPLACEMENT = exports.REGEX_ANSI_ESCAPE_CODES = exports.REGEX_NUMBER_OF_DIFFERENCES_STRING = void 0;
 const fs = __importStar(__nccwpck_require__(7147));
 const readline = __importStar(__nccwpck_require__(4521));
-const REGEX_NUMBER_OF_DIFFERENCES_STRING = /Number of stacks with differences:.*/;
-const REGEX_ANSI_ESCAPE_CODES = /\x1b\[[0-9;]*m/g;
-const REGEX_REQUIRES_REPLACEMENT = /\(requires replacement\)|\(may cause replacement\)/;
+const github_1 = __nccwpck_require__(978);
+exports.REGEX_NUMBER_OF_DIFFERENCES_STRING = /Number of stacks with differences:.*/;
+// eslint-disable-next-line no-control-regex
+exports.REGEX_ANSI_ESCAPE_CODES = /\x1b\[[0-9;]*m/g;
+exports.REGEX_REQUIRES_REPLACEMENT = /\(requires replacement\)|\(may cause replacement\)/;
+exports.REGEX_MARKDOWN_DIFF_STRING = /(?:\[(\+|-+)\])|(?:│\s(\+|-)\s│)/;
 const isNumberOfDifferencesString = (input) => {
-    return REGEX_NUMBER_OF_DIFFERENCES_STRING.test(input);
+    return exports.REGEX_NUMBER_OF_DIFFERENCES_STRING.test(input);
 };
 exports.isNumberOfDifferencesString = isNumberOfDifferencesString;
 const replaceAnsiEscapeCodes = (input) => {
-    return input.replace(REGEX_ANSI_ESCAPE_CODES, "");
+    return input.replace(exports.REGEX_ANSI_ESCAPE_CODES, '');
 };
 exports.replaceAnsiEscapeCodes = replaceAnsiEscapeCodes;
 const containsReplacementPhrase = (input) => {
-    return REGEX_REQUIRES_REPLACEMENT.test(input);
+    return exports.REGEX_REQUIRES_REPLACEMENT.test(input);
 };
 exports.containsReplacementPhrase = containsReplacementPhrase;
-const convertToMarkdown = async (filePath) => {
+const findDiffSymbol = (line) => {
+    const matches = line.match(exports.REGEX_MARKDOWN_DIFF_STRING);
+    if (matches) {
+        for (let i = 1; i < matches.length; i++) {
+            if (matches[i]) {
+                return matches[i];
+            }
+        }
+    }
+    return '';
+};
+exports.findDiffSymbol = findDiffSymbol;
+const trimLineIfNeeded = (line, symbol) => {
+    if (symbol !== '' && !line.startsWith('[')) {
+        return line.substring(1);
+    }
+    return line;
+};
+exports.trimLineIfNeeded = trimLineIfNeeded;
+const convertToDiff = (line) => {
+    const foundSymbol = (0, exports.findDiffSymbol)(line);
+    const trimmedLine = (0, exports.trimLineIfNeeded)(line, foundSymbol);
+    return foundSymbol !== '' ? foundSymbol + trimmedLine : trimmedLine;
+};
+exports.convertToDiff = convertToDiff;
+const convertCdkDiffToMarkdown = async (filePath) => {
     return new Promise((resolve, reject) => {
-        let markdownContent = [];
-        let numberOfDiffs = [];
+        const markdownContent = [];
+        const numberOfDiffs = [];
         let numberOfReplacements = 0;
         const fileStream = fs.createReadStream(filePath);
         const rl = readline.createInterface({
             input: fileStream,
             crlfDelay: Infinity
         });
-        rl.on('line', (line) => {
+        rl.on('line', line => {
             const cleanLine = (0, exports.replaceAnsiEscapeCodes)(line);
-            // Check for number of differences
+            const diffLine = (0, exports.convertToDiff)(cleanLine);
+            markdownContent.push(diffLine);
             if ((0, exports.isNumberOfDifferencesString)(cleanLine)) {
                 numberOfDiffs.push(cleanLine);
             }
@@ -29046,22 +29083,19 @@ const convertToMarkdown = async (filePath) => {
             }
         });
         rl.on('close', async () => {
-            // Truncate if content is too long
-            let truncatedContent = markdownContent.join('\n');
-            if (truncatedContent.length > 65000) {
-                truncatedContent = truncatedContent.slice(0, 65000) + "\n...truncated";
-            }
-            const markdownDiff = '```diff\n' + truncatedContent + '\n```';
+            const truncatedContent = (0, github_1.truncateCommentOnPullRequestContent)(markdownContent);
             const header = `✨ Number of stacks with differences: ${numberOfDiffs.length}`;
-            const replacementWarning = numberOfReplacements > 0 ? `⚠️ Number of resources that require replacement: ${numberOfReplacements}` : '';
-            resolve(`${header}\n${replacementWarning}\n${markdownDiff}`);
+            const replacementWarning = numberOfReplacements > 0
+                ? `⚠️ Number of resources that require replacement: ${numberOfReplacements}\n`
+                : '';
+            resolve(`${header}\n${replacementWarning}${truncatedContent}`);
         });
-        rl.on('error', (err) => {
+        rl.on('error', err => {
             reject(err);
         });
     });
 };
-exports.convertToMarkdown = convertToMarkdown;
+exports.convertCdkDiffToMarkdown = convertCdkDiffToMarkdown;
 
 
 /***/ }),
