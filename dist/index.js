@@ -29080,8 +29080,10 @@ const convertToMarkdown = async (filePath) => {
             }
             const markdownDiff = '```diff\n' + truncatedContent + '\n```';
             const header = `✨ Number of stacks with differences: ${numberOfDiffs.length}`;
-            const replacementWarning = numberOfReplacements > 0 ? `⚠️ Number of resources that require replacement: ${numberOfReplacements}` : '';
-            resolve(`${header}\n${replacementWarning}\n${markdownDiff}`);
+            // If you want to include the replacement warning
+            const replacementWarning = numberOfReplacements > 0 ? `⚠️ Number of resources that require replacement: ${numberOfReplacements}\n` : '';
+            // Combine header, replacement warning (if any), and diff content
+            resolve(`${header}\n${replacementWarning}${markdownDiff}`);
         });
         rl.on('error', (err) => {
             reject(err);
