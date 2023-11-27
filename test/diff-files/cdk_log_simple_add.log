@@ -1,0 +1,63 @@
+> dennis-ventures-cdk@0.1.0 cdk
+> cdk diff --progress=events
+
+Stack DennisVenturesCdkStack
+IAM Statement Changes
+┌───┬─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┬────────┬───────────────────────────────────┬────────────────────────────────────────────────────────────────┬───────────┐
+│   │ Resource                                                                                                                            │ Effect │ Action                            │ Principal                                                      │ Condition │
+├───┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼────────┼───────────────────────────────────┼────────────────────────────────────────────────────────────────┼───────────┤
+│ + │ ${Custom::VpcRestrictDefaultSGCustomResourceProvider/Role.Arn}                                                                      │ Allow  │ sts:AssumeRole                    │ Service:lambda.amazonaws.com                                   │           │
+├───┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼────────┼───────────────────────────────────┼────────────────────────────────────────────────────────────────┼───────────┤
+│ + │ arn:${AWS::Partition}:ec2:${AWS::Region}:${AWS::AccountId}:security-group/${DennisVenturesCdkStackVpc22D0C361.DefaultSecurityGroup} │ Allow  │ ec2:AuthorizeSecurityGroupEgress  │ AWS:${Custom::VpcRestrictDefaultSGCustomResourceProvider/Role} │           │
+│   │                                                                                                                                     │        │ ec2:AuthorizeSecurityGroupIngress │                                                                │           │
+│   │                                                                                                                                     │        │ ec2:RevokeSecurityGroupEgress     │                                                                │           │
+│   │                                                                                                                                     │        │ ec2:RevokeSecurityGroupIngress    │                                                                │           │
+└───┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴────────┴───────────────────────────────────┴────────────────────────────────────────────────────────────────┴───────────┘
+IAM Policy Changes
+┌───┬────────────────────────────────────────────────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────┐
+│   │ Resource                                                   │ Managed Policy ARN                                                                           │
+├───┼────────────────────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────┤
+│ + │ ${Custom::VpcRestrictDefaultSGCustomResourceProvider/Role} │ {"Fn::Sub":"arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"} │
+└───┴────────────────────────────────────────────────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────┘
+(NOTE: There may be security-related changes not in this list. See https://github.com/aws/aws-cdk/issues/1299)
+
+Parameters
+[+] Parameter BootstrapVersion BootstrapVersion: {"Type":"AWS::SSM::Parameter::Value<String>","Default":"/cdk-bootstrap/hnb659fds/version","Description":"Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"}
+
+Conditions
+[+] Condition CDKMetadata/Condition CDKMetadataAvailable: {"Fn::Or":[{"Fn::Or":[{"Fn::Equals":[{"Ref":"AWS::Region"},"af-south-1"]},{"Fn::Equals":[{"Ref":"AWS::Region"},"ap-east-1"]},{"Fn::Equals":[{"Ref":"AWS::Region"},"ap-northeast-1"]},{"Fn::Equals":[{"Ref":"AWS::Region"},"ap-northeast-2"]},{"Fn::Equals":[{"Ref":"AWS::Region"},"ap-south-1"]},{"Fn::Equals":[{"Ref":"AWS::Region"},"ap-southeast-1"]},{"Fn::Equals":[{"Ref":"AWS::Region"},"ap-southeast-2"]},{"Fn::Equals":[{"Ref":"AWS::Region"},"ca-central-1"]},{"Fn::Equals":[{"Ref":"AWS::Region"},"cn-north-1"]},{"Fn::Equals":[{"Ref":"AWS::Region"},"cn-northwest-1"]}]},{"Fn::Or":[{"Fn::Equals":[{"Ref":"AWS::Region"},"eu-central-1"]},{"Fn::Equals":[{"Ref":"AWS::Region"},"eu-north-1"]},{"Fn::Equals":[{"Ref":"AWS::Region"},"eu-south-1"]},{"Fn::Equals":[{"Ref":"AWS::Region"},"eu-west-1"]},{"Fn::Equals":[{"Ref":"AWS::Region"},"eu-west-2"]},{"Fn::Equals":[{"Ref":"AWS::Region"},"eu-west-3"]},{"Fn::Equals":[{"Ref":"AWS::Region"},"me-south-1"]},{"Fn::Equals":[{"Ref":"AWS::Region"},"sa-east-1"]},{"Fn::Equals":[{"Ref":"AWS::Region"},"us-east-1"]},{"Fn::Equals":[{"Ref":"AWS::Region"},"us-east-2"]}]},{"Fn::Or":[{"Fn::Equals":[{"Ref":"AWS::Region"},"us-west-1"]},{"Fn::Equals":[{"Ref":"AWS::Region"},"us-west-2"]}]}]}
+
+Resources
+[+] AWS::EC2::VPC DennisVenturesCdkStack/Vpc DennisVenturesCdkStackVpc22D0C361 
+[+] AWS::EC2::Subnet DennisVenturesCdkStack/Vpc/PublicSubnet1/Subnet DennisVenturesCdkStackVpcPublicSubnet1Subnet6B0125E3 
+[+] AWS::EC2::RouteTable DennisVenturesCdkStack/Vpc/PublicSubnet1/RouteTable DennisVenturesCdkStackVpcPublicSubnet1RouteTable7C325285 
+[+] AWS::EC2::SubnetRouteTableAssociation DennisVenturesCdkStack/Vpc/PublicSubnet1/RouteTableAssociation DennisVenturesCdkStackVpcPublicSubnet1RouteTableAssociation7D6D4DB0 
+[+] AWS::EC2::Route DennisVenturesCdkStack/Vpc/PublicSubnet1/DefaultRoute DennisVenturesCdkStackVpcPublicSubnet1DefaultRouteD8A62D49 
+[+] AWS::EC2::EIP DennisVenturesCdkStack/Vpc/PublicSubnet1/EIP DennisVenturesCdkStackVpcPublicSubnet1EIPFC614F5B 
+[+] AWS::EC2::NatGateway DennisVenturesCdkStack/Vpc/PublicSubnet1/NATGateway DennisVenturesCdkStackVpcPublicSubnet1NATGateway5A0F7DED 
+[+] AWS::EC2::Subnet DennisVenturesCdkStack/Vpc/PublicSubnet2/Subnet DennisVenturesCdkStackVpcPublicSubnet2SubnetCE003636 
+[+] AWS::EC2::RouteTable DennisVenturesCdkStack/Vpc/PublicSubnet2/RouteTable DennisVenturesCdkStackVpcPublicSubnet2RouteTable634DC59C 
+[+] AWS::EC2::SubnetRouteTableAssociation DennisVenturesCdkStack/Vpc/PublicSubnet2/RouteTableAssociation DennisVenturesCdkStackVpcPublicSubnet2RouteTableAssociation6FC3BD0C 
+[+] AWS::EC2::Route DennisVenturesCdkStack/Vpc/PublicSubnet2/DefaultRoute DennisVenturesCdkStackVpcPublicSubnet2DefaultRoute92F6349D 
+[+] AWS::EC2::EIP DennisVenturesCdkStack/Vpc/PublicSubnet2/EIP DennisVenturesCdkStackVpcPublicSubnet2EIP24B5CF5E 
+[+] AWS::EC2::NatGateway DennisVenturesCdkStack/Vpc/PublicSubnet2/NATGateway DennisVenturesCdkStackVpcPublicSubnet2NATGateway1C6CDC9A 
+[+] AWS::EC2::Subnet DennisVenturesCdkStack/Vpc/PrivateSubnet1/Subnet DennisVenturesCdkStackVpcPrivateSubnet1Subnet532A9C3A 
+[+] AWS::EC2::RouteTable DennisVenturesCdkStack/Vpc/PrivateSubnet1/RouteTable DennisVenturesCdkStackVpcPrivateSubnet1RouteTableAD24CC04 
+[+] AWS::EC2::SubnetRouteTableAssociation DennisVenturesCdkStack/Vpc/PrivateSubnet1/RouteTableAssociation DennisVenturesCdkStackVpcPrivateSubnet1RouteTableAssociation3181F8C4 
+[+] AWS::EC2::Route DennisVenturesCdkStack/Vpc/PrivateSubnet1/DefaultRoute DennisVenturesCdkStackVpcPrivateSubnet1DefaultRoute2992C7D5 
+[+] AWS::EC2::Subnet DennisVenturesCdkStack/Vpc/PrivateSubnet2/Subnet DennisVenturesCdkStackVpcPrivateSubnet2Subnet73627312 
+[+] AWS::EC2::RouteTable DennisVenturesCdkStack/Vpc/PrivateSubnet2/RouteTable DennisVenturesCdkStackVpcPrivateSubnet2RouteTable982F9CB4 
+[+] AWS::EC2::SubnetRouteTableAssociation DennisVenturesCdkStack/Vpc/PrivateSubnet2/RouteTableAssociation DennisVenturesCdkStackVpcPrivateSubnet2RouteTableAssociation48B90D6E 
+[+] AWS::EC2::Route DennisVenturesCdkStack/Vpc/PrivateSubnet2/DefaultRoute DennisVenturesCdkStackVpcPrivateSubnet2DefaultRoute9D5E2561 
+[+] AWS::EC2::InternetGateway DennisVenturesCdkStack/Vpc/IGW DennisVenturesCdkStackVpcIGW528D6B18 
+[+] AWS::EC2::VPCGatewayAttachment DennisVenturesCdkStack/Vpc/VPCGW DennisVenturesCdkStackVpcVPCGWFBDA077C 
+[+] Custom::VpcRestrictDefaultSG DennisVenturesCdkStack/Vpc/RestrictDefaultSecurityGroupCustomResource DennisVenturesCdkStackVpcRestrictDefaultSecurityGroupCustomResource53314C22 
+[+] AWS::IAM::Role Custom::VpcRestrictDefaultSGCustomResourceProvider/Role CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0 
+[+] AWS::Lambda::Function Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E 
+
+Other Changes
+[+] Unknown Rules: {"CheckBootstrapVersion":{"Assertions":[{"Assert":{"Fn::Not":[{"Fn::Contains":[["1","2","3","4","5"],{"Ref":"BootstrapVersion"}]}]},"AssertDescription":"CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."}]}}
+
+
+✨  Number of stacks with differences: 1
+
