@@ -31,7 +31,7 @@ Welcome to the AWS CDK Diff GitHub Action repository! This project offers a stre
 ## Overview
 The AWS CDK Diff GitHub Action automatically runs cdk diff on your AWS CDK projects whenever a pull request is created or updated. It then processes the output of cdk diff, cleans it for readability, and posts it as a comment directly on the pull request. This process provides immediate insights into how the proposed changes will affect your AWS infrastructure, making the review process more informed and efficient.
 
-Most of the template for the action was taken from [here](https://github.com/actions/typescript-action/tree/main) and the general idea taken from [here](https://github.com/karlderkaefer/cdk-notifier). If/where credit is due, credit is given to them in the project. Origanl built to learn, but may prove to be useful to others.
+Most of the template for the action was taken from [here](https://github.com/actions/typescript-action/tree/main) and the general idea taken from [here](https://github.com/karlderkaefer/cdk-notifier), credit to them.
 
 ## Key Features
 - ***Automated Diff Summary***🤖: Automatically runs cdk diff for pull requests, ensuring that all infrastructure changes are captured and reviewed.
