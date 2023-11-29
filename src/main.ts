@@ -33,7 +33,9 @@ export async function run(): Promise<void> {
     fs.writeFileSync('cdk.log', output)
 
     // Process the output as needed
-    const markdown = await convertCdkDiffToMarkdown(output)
+    const markdown = await convertCdkDiffToMarkdown(
+      './test/diff-files/cdk_log_simple_add.log'
+    )
     await postCommentOnPullRequest(repoToken, markdown)
   } catch (err) {
     // Fail the workflow run if an error occurs

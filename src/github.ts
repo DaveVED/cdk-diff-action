@@ -24,9 +24,9 @@ export const postCommentOnPullRequest = async (
     await octokit.request(
       'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
       {
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        issue_number: context.issue.number,
+        owner: 'daveved',
+        repo: 'cdk-diff-action/',
+        issue_number: 3,
         body: comment
       }
     )
