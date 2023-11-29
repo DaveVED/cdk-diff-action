@@ -46,31 +46,23 @@ Refer to the [actions.yml](https://github.com/DaveVED/cdk-diff-action/blob/main/
     repo-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-### Basic
+### Advanced Usage
 
 ```yml
-- uses: daveved/cdk-diff-action@v1
-  with:
-    repo-token: ${{ secrets.GITHUB_TOKEN }}
-```
-
-### Referencing the Output
-
-```yml
+# Example of referencing the output from the action
 - name: Use My Action
-  id: myaction # Assign an ID to the step to reference its outputs
+  id: myaction
   uses: daveved/cdk-diff-action@v1
   with:
     repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-# Example of using the output from the above step
 - name: Use Output
   run: echo "The output was ${{ steps.myaction.outputs.outputPath }}"
 ```
 
-### Dependencies
+### Setup Dependencies
 
-For **version 1** your CI needs to be setup with your AWS credentails, and the cdk. This might change in future, but for now, you need to have this done befor you call the `cdk-diff-action`.
+For version 1, ensure your CI is set up with AWS credentials and the AWS CDK before calling `cdk-diff-action`.
 
 ```yml
 - uses: actions/checkout@v4
@@ -102,11 +94,11 @@ For **version 1** your CI needs to be setup with your AWS credentails, and the c
 
 ## Key Features
 
-- **_Automated Diff Summary_**🤖: Automatically runs cdk diff for pull requests, ensuring that all infrastructure changes are captured and reviewed.
-- **_Clean and Clear Output_**🧼: Transforms the raw output of cdk diff into a more readable format by removing unnecessary escape codes and formatting the content in Markdown.
-- **_Enhanced Review Process_**🔍: By posting the diff summary directly on the pull request, reviewers can easily understand the impact of the changes without leaving GitHub.
-- **_Detection of Critical Changes_**⚠️: Highlights important aspects such as the number of resources that require replacement, aiding in risk assessment and decision-making.
-- **_Efficient Output Management_**📏: Ensures the comment size is within GitHub's limits, truncating the content if necessary to fit within the constraints.
+- **Automated Diff Summary**: Runs cdk diff for pull requests and provides a readable summary.
+- **Clean and Clear Output**: Formats the cdk diff output in Markdown for better readability.
+- **Enhanced Review Process**: Posts the diff summary directly on pull requests for easy access.
+- **Detection of Critical Changes**: Highlights significant changes and potential risks.
+- **Efficient Output Management**: Ensures the comment size is within GitHub's constraints.
 
 ## How It Works
 
