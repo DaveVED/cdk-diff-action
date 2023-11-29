@@ -41,7 +41,7 @@ Refer to the [actions.yml](https://github.com/DaveVED/cdk-diff-action/blob/main/
 ### Basic Configuration
 
 ```yaml
-- uses: daveved/cdk-diff-action@v1
+- uses: daveved/cdk-diff-action@v0.1.0
   with:
     repo-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -52,12 +52,12 @@ Refer to the [actions.yml](https://github.com/DaveVED/cdk-diff-action/blob/main/
 # Example of referencing the output from the action
 - name: Use My Action
   id: myaction
-  uses: daveved/cdk-diff-action@v1
+  uses: daveved/cdk-diff-action@v0.1.0
   with:
     repo-token: ${{ secrets.GITHUB_TOKEN }}
 
 - name: Use Output
-  run: echo "The output was ${{ steps.myaction.outputs.outputPath }}"
+  run: echo "The output was ${{ steps.myaction.outputs.cdkOutPutPath }}"
 ```
 
 ### Setup Dependencies
@@ -87,7 +87,7 @@ For version 1, ensure your CI is set up with AWS credentials and the AWS CDK bef
     aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
     aws-region: "us-east-1"
 
-- uses: daveved/cdk-diff-action@v1
+- uses: daveved/cdk-diff-action@v0.1.0
   with:
     repo-token: ${{ secrets.GITHUB_TOKEN }}
 ```
