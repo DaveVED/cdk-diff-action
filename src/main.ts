@@ -24,25 +24,29 @@ export async function run(): Promise<void> {
   }
 
   try {
-    const repoToken: string = core.getInput('repo-token')
+    const repoToken: string = core.getInput('repo-token', { required: true })
 
     // Execute the CDK diff command
     await exec.exec('cdk diff --progress=events', [], options)
 
-    // Optional: Write the output to a file if needed
+    // Write the output to a file
     fs.writeFileSync('cdk.log', output)
 
+    // Debug: Log the output size
+    core.debug(`Output size: ${output.length} characters`)
+
     // Process the output as needed
-    const markdown = await convertCdkDiffToMarkdown(
-      './test/diff-files/cdk_log_simple_add.log'
-    )
+    const markdown = await convertCdkDiffToMarkdown('cdk.log')
+
+    // Post the comment on the pull request
     await postCommentOnPullRequest(repoToken, markdown)
   } catch (err) {
     // Fail the workflow run if an error occurs
+    core.error(`Error occurred: ${err}`)
     if (error) {
-      core.setFailed(error)
+      core.setFailed(`Execution error: ${error}`)
     } else if (err instanceof Error) {
-      core.setFailed(err.message)
+      core.setFailed(`Unhandled exception: ${err.message}`)
     }
   }
 }
