@@ -9,16 +9,14 @@ branding:
 
 # Define your inputs here.
 inputs:
-  outputFile:
-    description: 'Output file for CDK Diff'
-    required: true
   repo-token:
     description: 'Action CI Automatic Repo Token.'
     required: true
+
 # Define your outputs here.
 outputs:
-  outputPath:
-    description: 'Your output file destination here'
+  cdkOutPutPath:
+    description: 'Your cdk.log output file destination'
 
 runs:
   using: node20

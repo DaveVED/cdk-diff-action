@@ -26,24 +26,84 @@
   </a>
 </p>
 
-Welcome to the AWS CDK Diff GitHub Action repository! This project offers a streamlined and automated way to manage infrastructure changes in AWS Cloud Development Kit (CDK) projects, specifically focusing on the cdk diff command. The primary goal of this GitHub Action is to enhance the review process of pull requests by providing a clear, readable, and concise summary of infrastructure changes proposed in each pull request.
+Welcome to the AWS CDK Diff GitHub Action repository! This GitHub Action automates the process of reviewing infrastructure changes in AWS Cloud Development Kit (CDK) projects by using the cdk diff command. It aims to enhance pull request reviews by providing a clear and concise summary of proposed infrastructure changes.
 
 ## Overview
-The AWS CDK Diff GitHub Action automatically runs cdk diff on your AWS CDK projects whenever a pull request is created or updated. It then processes the output of cdk diff, cleans it for readability, and posts it as a comment directly on the pull request. This process provides immediate insights into how the proposed changes will affect your AWS infrastructure, making the review process more informed and efficient.
 
-Most of the template for the action was taken from [here](https://github.com/actions/typescript-action/tree/main) and the general idea taken from [here](https://github.com/karlderkaefer/cdk-notifier). If/where credit is due, credit is given to them in the project. Origanl built to learn, but may prove to be useful to others.
+This action runs cdk diff on AWS CDK projects for each pull request, processes the output for readability, and posts it as a comment on the pull request. This facilitates informed and efficient review processes by providing immediate insights into the impact of proposed changes on AWS infrastructure.
+
+Most of the template for the action was taken from [here](https://github.com/actions/typescript-action/tree/main) and the general idea taken from [here](https://github.com/karlderkaefer/cdk-notifier), credit to them.
+
+## Usage
+
+Refer to the [actions.yml](https://github.com/DaveVED/cdk-diff-action/blob/main/action.yml)for detailed configuration options.
+
+### Basic Configuration
+
+```yaml
+- uses: daveved/cdk-diff-action@v1
+  with:
+    repo-token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+### Advanced Usage
+
+```yml
+# Example of referencing the output from the action
+- name: Use My Action
+  id: myaction
+  uses: daveved/cdk-diff-action@v1
+  with:
+    repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+- name: Use Output
+  run: echo "The output was ${{ steps.myaction.outputs.outputPath }}"
+```
+
+### Setup Dependencies
+
+For version 1, ensure your CI is set up with AWS credentials and the AWS CDK before calling `cdk-diff-action`.
+
+```yml
+- uses: actions/checkout@v4
+
+- uses: actions/setup-python@v4
+  with:
+    python-version: "3.9"
+
+- uses: actions/setup-node@v4
+  with:
+    node-version: '20'
+
+- run: npm ci
+
+- run: |
+    python -m pip install --upgrade pip
+    npm install -g aws-cdk
+
+- uses: aws-actions/configure-aws-credentials@master
+  with:
+    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+    aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+    aws-region: "us-east-1"
+
+- uses: daveved/cdk-diff-action@v1
+  with:
+    repo-token: ${{ secrets.GITHUB_TOKEN }}
+```
 
 ## Key Features
-- ***Automated Diff Summary***🤖: Automatically runs cdk diff for pull requests, ensuring that all infrastructure changes are captured and reviewed.
-- ***Clean and Clear Output***🧼:  Transforms the raw output of cdk diff into a more readable format by removing unnecessary escape codes and formatting the content in Markdown.
-- ***Enhanced Review Process***🔍:  By posting the diff summary directly on the pull request, reviewers can easily understand the impact of the changes without leaving GitHub.
-- ***Detection of Critical Changes***⚠️:  Highlights important aspects such as the number of resources that require replacement, aiding in risk assessment and decision-making.
-- ***Efficient Output Management***📏:  Ensures the comment size is within GitHub's limits, truncating the content if necessary to fit within the constraints.
+
+- **Automated Diff Summary**: Runs cdk diff for pull requests and provides a readable summary.
+- **Clean and Clear Output**: Formats the cdk diff output in Markdown for better readability.
+- **Enhanced Review Process**: Posts the diff summary directly on pull requests for easy access.
+- **Detection of Critical Changes**: Highlights significant changes and potential risks.
+- **Efficient Output Management**: Ensures the comment size is within GitHub's constraints.
 
 ## How It Works
 
 The action comprises several key functions:
 
-1. ***Reading and Cleaning Output***: Reads the cdk diff output file, cleans it of ANSI escape codes, and converts it into a Markdown-friendly format.
-2. ***Processing Differences***: Identifies the number of stacks with differences and resources requiring replacement, providing a concise summary at the top of the comment.
-3. ***Commenting on Pull Requests***: Utilizes the GitHub API to post the processed cdk diff output as a comment on the relevant pull request.
+1. **_Reading and Cleaning Output_**: Reads the cdk diff output file, cleans it of ANSI escape codes, and converts it into a Markdown-friendly format.
+2. **_Processing Differences_**: Identifies the number of stacks with differences and resources requiring replacement, providing a concise summary at the top of the comment.
+3. **_Commenting on Pull Requests_**: Utilizes the GitHub API to post the processed cdk diff output as a comment on the relevant pull request.
