@@ -112,4 +112,4 @@ The action comprises several key functions:
 
 See some example diff audits below.
 
-[Example Diff](./artifacts/example-diff.png)
+![Example Diff Simple](https://github.com/daveved/cdk-diff-action/blob/main/artifacts/example-diff.png?raw=true)
