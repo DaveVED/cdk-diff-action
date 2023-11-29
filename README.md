@@ -107,3 +107,9 @@ The action comprises several key functions:
 1. **_Reading and Cleaning Output_**: Reads the cdk diff output file, cleans it of ANSI escape codes, and converts it into a Markdown-friendly format.
 2. **_Processing Differences_**: Identifies the number of stacks with differences and resources requiring replacement, providing a concise summary at the top of the comment.
 3. **_Commenting on Pull Requests_**: Utilizes the GitHub API to post the processed cdk diff output as a comment on the relevant pull request.
+
+## Example Diffs
+
+See some example diff audits below.
+
+![Example Diff Simple](https://github.com/daveved/cdk-diff-action/blob/main/artifacts/example-diff.png?raw=true)

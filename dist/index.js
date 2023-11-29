@@ -30221,12 +30221,11 @@ async function run() {
         await exec.exec('cdk diff --progress=events', [], options);
         // Write the output to a file
         fs.writeFileSync('cdk.log', output);
-        // Debug: Log the output size
-        core.debug(`Output size: ${output.length} characters`);
         // Process the output as needed
         const markdown = await (0, transform_1.convertCdkDiffToMarkdown)('cdk.log');
         // Post the comment on the pull request
         await (0, github_1.postCommentOnPullRequest)(repoToken, markdown);
+        core.setOutput('cdkOutPutPath', 'cdk.log');
     }
     catch (err) {
         // Fail the workflow run if an error occurs
