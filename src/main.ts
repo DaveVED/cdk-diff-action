@@ -32,14 +32,12 @@ export async function run(): Promise<void> {
     // Write the output to a file
     fs.writeFileSync('cdk.log', output)
 
-    // Debug: Log the output size
-    core.debug(`Output size: ${output.length} characters`)
-
     // Process the output as needed
     const markdown = await convertCdkDiffToMarkdown('cdk.log')
 
     // Post the comment on the pull request
     await postCommentOnPullRequest(repoToken, markdown)
+    core.setOutput('cdkOutPutPath', 'cdk.log')
   } catch (err) {
     // Fail the workflow run if an error occurs
     core.error(`Error occurred: ${err}`)

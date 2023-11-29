@@ -1,11 +1,11 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'AWS CDK Plan Auditor'
+description: 'Mange and review you CDK diff outputs in GitHub pull requests.'
+author: 'Dave Dennis'
 
 # Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
-  icon: 'heart'
-  color: 'red'
+  icon: 'info'
+  color: 'purple'
 
 # Define your inputs here.
 inputs:
